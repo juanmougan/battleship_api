@@ -25,25 +25,39 @@ class Games < Grip::Controller::Http
         "player1_id": UUID.random.to_s,
         "board":      board,
         "shots":      shots,
+        "status":     "CREATED", # TODO: do not hardcode. Use an Enum?
       }
     )
   end
 
-  # def get(context)
-  #   params = url(context)
-  #   json(
-  #     context,
-  #     {
-  #       "id": params["id"]
-  #     }
-  #   )
-  # end
+  def patch(context)
+    puts "Routed to PATCH"
+    url_params = url(context)
+    body_params = json(context)
+    game_id = url_params["game_id"]
+    player_name = body_params["player_name"]
+    board = "TODO should be held in the Game object" # TODO add types here
+    player1_id = "TODO this should be held in the Game object"
+    shots = "TODO" # TODO new array
+    json(
+      context,
+      {
+        "id":         url_params["game_id"],
+        "player1_id": player1_id,
+        "player2_id": UUID.random.to_s,
+        "board":      board,
+        "shots":      shots,
+        "status":     "CREATED", # TODO: do not hardcode. Use an Enum?
+      }
+    )
+  end
 end
 
 class Application < Grip::Application
   def initialize
     get "/", Index
-    resource "/games", Games
+    post "/games", Games
+    patch "/games/:game_id", Games
   end
 end
 
