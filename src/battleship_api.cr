@@ -33,7 +33,6 @@ class Games < Grip::Controller::Http
   end
 
   def patch(context)
-    puts "Routed to PATCH"
     url_params = url(context)
     body_params = json(context)
     game_id = url_params["game_id"]
@@ -59,6 +58,27 @@ class Games < Grip::Controller::Http
       }
     )
   end
+
+  def put(context)
+    url_params = url(context)
+    body_params = json(context)
+    game_id = url_params["game_id"]
+    player_id = url_params["player_id"]
+    shots = body_params["shots"] # TODO add types here
+    json(
+      context,
+      {
+        "id":             url_params["game_id"],
+        "current_player": {
+          "id":    player_id,
+          "board": "TODO board",
+          "shots": shots,
+        },
+        "shot_result": "MISSED", # TODO Enum?
+        "your_turn":   false,    # Of course, you just played :)
+      }
+    )
+  end
 end
 
 class Application < Grip::Application
@@ -66,6 +86,7 @@ class Application < Grip::Application
     get "/", Index
     post "/games", Games
     patch "/games/:game_id", Games
+    put "/games/:game_id/players/:player_id", Games
   end
 end
 
