@@ -1,0 +1,17 @@
+name: battleship_api
+version: 0.1.0
+
+authors:
+  - Juan Manuel Mougan <juanmougan@gmail.com>
+
+dependencies:
+  grip:
+    github: grip-framework/grip
+
+targets:
+  battleship_api:
+    main: src/battleship_api.cr
+
+crystal: 0.33.0
+
+license: MIT
