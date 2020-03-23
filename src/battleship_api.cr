@@ -21,11 +21,13 @@ class Games < Grip::Controller::Http
     json(
       context,
       {
-        "id":         UUID.random.to_s,
-        "player1_id": UUID.random.to_s,
-        "board":      board,
-        "shots":      shots,
-        "status":     "CREATED", # TODO: do not hardcode. Use an Enum?
+        "id":       UUID.random.to_s,
+        "player_1": {
+          "id":    UUID.random.to_s,
+          "board": board,
+          "shots": shots,
+        },
+        "status": "CREATED", # TODO: do not hardcode. Use an Enum?
       }
     )
   end
@@ -42,12 +44,18 @@ class Games < Grip::Controller::Http
     json(
       context,
       {
-        "id":         url_params["game_id"],
-        "player1_id": player1_id,
-        "player2_id": UUID.random.to_s,
-        "board":      board,
-        "shots":      shots,
-        "status":     "CREATED", # TODO: do not hardcode. Use an Enum?
+        "id":       url_params["game_id"],
+        "player_1": {
+          "id":    player1_id,
+          "board": "TODO board",
+          "shots": "TODO shots",
+        },
+        "player_2": {
+          "id":    UUID.random.to_s,
+          "board": "TODO board",
+          "shots": "TODO shots",
+        },
+        "status": "CREATED", # TODO: do not hardcode. Use an Enum?
       }
     )
   end
