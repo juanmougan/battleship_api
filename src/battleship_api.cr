@@ -79,6 +79,20 @@ class Games < Grip::Controller::Http
       }
     )
   end
+
+  def get(context)
+    url_params = url(context)
+    game_id = url_params["game_id"]
+    # TODO create a GameStatus and nest it inside Game
+    json(
+      context,
+      {
+        "id":             game_id,
+        "status":         "FINISHED",       # TODO
+        "next_player_id": UUID.random.to_s, # TODO
+      }
+    )
+  end
 end
 
 class Application < Grip::Application
@@ -87,6 +101,7 @@ class Application < Grip::Application
     post "/games", Games
     patch "/games/:game_id", Games
     put "/games/:game_id/players/:player_id", Games
+    get "/games/:game_id/status", Games
   end
 end
 
