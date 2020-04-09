@@ -7,6 +7,8 @@ authors:
 dependencies:
   grip:
     github: grip-framework/grip
+  url-shortener:
+    github: juanmougan/url-shortener
 
 targets:
   battleship_api:

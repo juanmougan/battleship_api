@@ -1,5 +1,16 @@
 require "grip"
 require "uuid"
+require "url-shortener"
+
+def base_url
+  ENV["API_BASE_URL"] ||= "http://localhost:3000"
+end
+
+def shorten_url(url)
+  UrlShortener::Shortener
+    .from_url(url)
+    .shorten
+end
 
 class Index < Grip::Controller::Http
   def get(context)
@@ -15,19 +26,23 @@ end
 class Games < Grip::Controller::Http
   def post(context)
     params = json(context)
+    puts "Got this JSON: #{params}"
     player_name = params["player_name"]
     board = params["board"] # TODO add types here
-    shots = "TODO"          # TODO new array
+    shots = params["board"] # TODO empty array instead
+    game_id = UUID.random.to_s
     json(
       context,
       {
-        "id":       UUID.random.to_s,
+        "id":       game_id,
         "player_1": {
           "id":    UUID.random.to_s,
+          "name":  player_name,
           "board": board,
           "shots": shots,
         },
-        "status": "CREATED", # TODO: do not hardcode. Use an Enum?
+        "status":         "CREATED", # TODO: do not hardcode. Use an Enum?
+        "shareable_link": shorten_url("#{base_url}/games/#{game_id}"),
       }
     )
   end
@@ -82,6 +97,7 @@ class Games < Grip::Controller::Http
 
   def get(context)
     url_params = url(context)
+    puts "Got this params: #{url_params}"
     game_id = url_params["game_id"]
     # TODO create a GameStatus and nest it inside Game
     json(
