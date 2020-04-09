@@ -117,6 +117,7 @@ class Application < Grip::Application
     post "/games", Games
     patch "/games/:game_id", Games
     put "/games/:game_id/players/:player_id", Games
+    # TODO decide if I need "/games/:id" instead
     get "/games/:game_id/status", Games
   end
 end
