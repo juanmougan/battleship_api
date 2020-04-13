@@ -14,7 +14,7 @@ def shorten_url(url)
 end
 
 class CustomController < Grip::Controller::Http
-  @@all_games = Games.new
+  @@games = Games.new
 end
 
 class Index < CustomController
@@ -36,7 +36,7 @@ class Games < CustomController
     board = Array(Array(String)).from_json(params["board"].to_s)
     games_url = "#{base_url}/games".to_s
     puts "Will create Game with player_name: #{player_name} board: #{board} games_url: #{games_url}"
-    game = @@all_games.as(Games).create(player_name, board, games_url)
+    game = @@games.as(Games).create(player_name, board, games_url)
     json(
       context,
       {
@@ -59,7 +59,7 @@ class Games < CustomController
     game_id = UUID.new(url_params["game_id"])
     player_name = body_params["player_name"].to_s
     board = Array(Array(String)).from_json(body_params["board"].to_s)
-    game = @@all_games.as(Games).update(game_id, player_name, board)
+    game = @@games.as(Games).update(game_id, player_name, board)
     json(
       context,
       {
