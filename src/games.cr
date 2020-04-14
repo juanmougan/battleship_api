@@ -15,8 +15,8 @@ class Games
     @games[game.id]
   end
 
-  def update(game_id : UUID, player_2_name : String, player_2_board : Array(Array(String)))
-    @games[game_id].edit(player_2_name, player_2_board)
+  def update(game_id : UUID, player_2_name : String, player_2_board : Array(Array(String)), game_status : String)
+    @games[game_id].edit(player_2_name, player_2_board, game_status)
     @games[game_id]
   end
 

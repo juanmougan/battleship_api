@@ -36,7 +36,7 @@ class Games < CustomController
     board = Array(Array(String)).from_json(params["board"].to_s)
     games_url = "#{base_url}/games".to_s
     puts "Will create Game with player_name: #{player_name} board: #{board} games_url: #{games_url}"
-    game = @@games.as(Games).create(player_name, board, games_url)
+    game = @@games.create(player_name, board, games_url)
     json(
       context,
       {
@@ -59,11 +59,11 @@ class Games < CustomController
     game_id = UUID.new(url_params["game_id"])
     player_name = body_params["player_name"].to_s
     board = Array(Array(String)).from_json(body_params["board"].to_s)
-    game = @@games.as(Games).update(game_id, player_name, board)
+    game = @@games.update(game_id, player_name, board, "READY")
     json(
       context,
       {
-        "id":       url_params["game_id"],
+        "id":       game.id.to_s,
         "player_1": {
           "id":    game.player_1.id.to_s,
           "name":  game.player_1.name,
@@ -76,12 +76,13 @@ class Games < CustomController
           "board": game.player_2.board,
           "shots": game.player_2.shots,
         },
-        "status":         "READY", # TODO: do not hardcode. Use an Enum?
+        "status":         game.status,
         "shareable_link": game.shareable_link,
       }
     )
   end
 
+  # TODO this is the only missing endpoint to implement :)
   def put(context)
     url_params = url(context)
     body_params = json(context)
@@ -105,15 +106,15 @@ class Games < CustomController
 
   def get(context)
     url_params = url(context)
-    puts "Got this params: #{url_params}"
-    game_id = url_params["game_id"]
+    game_id = UUID.new(url_params["game_id"])
+    game = @@games.get(game_id)
     # TODO create a GameStatus and nest it inside Game
     json(
       context,
       {
-        "id":             game_id,
-        "status":         "FINISHED",       # TODO
-        "next_player_id": UUID.random.to_s, # TODO
+        "id":             game.id.to_s,
+        "status":         game.status,
+        "next_player_id": game.next_turn.id.to_s,
       }
     )
   end

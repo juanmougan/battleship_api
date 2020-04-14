@@ -1,8 +1,6 @@
 require "uuid"
 
 class Game
-  # def initialize(player_1_name : String, player_1_board : Array(JSON::Any), url : String)
-
   BOARD_SIZE = 10
 
   property id : UUID
@@ -21,8 +19,9 @@ class Game
     @shareable_link = shorten_url("#{url}/#{id}".to_s)
   end
 
-  def edit(player_2_name : String, player_2_board : Array(Array(String)))
+  def edit(player_2_name : String, player_2_board : Array(Array(String)), game_status : String)
     @player_2 = Player.new(player_2_name, player_2_board)
+    self.status = game_status
   end
 
   def shorten_url(url)
