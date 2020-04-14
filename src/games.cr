@@ -19,4 +19,8 @@ class Games
     @games[game_id].edit(player_2_name, player_2_board)
     @games[game_id]
   end
+
+  def get(id : UUID)
+    @games[id]
+  end
 end
