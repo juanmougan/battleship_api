@@ -86,18 +86,22 @@ class Games < CustomController
   def put(context)
     url_params = url(context)
     body_params = json(context)
-    game_id = url_params["game_id"]
-    player_id = url_params["player_id"]
-    shots = body_params["shots"] # TODO add types here
+    game_id = UUID.new(url_params["game_id"])
+    player_id = UUID.new(url_params["player_id"])
+    # game = @@games.get(game_id).get_player(player_id) # TODO filter by player id, should be 1 or 2
+    shots = Array(Array(String)).from_json(body_params["shots"].to_s)
     json(
       context,
       {
-        "id":             url_params["game_id"],
+        # "id": game.id.to_s,     # TODO use this instead
+        "id": game_id.to_s,
+        # TODO implement this on the Game
         "current_player": {
-          "id":    player_id,
+          "id":    player_id.to_s,
           "board": "TODO board",
           "shots": shots,
         },
+        # TODO maybe the Player can handle this
         "shot_result": "MISSED", # TODO Enum?
         "your_turn":   false,    # Of course, you just played :)
       }

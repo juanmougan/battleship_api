@@ -13,7 +13,7 @@ class Game
   def initialize(player_1_name : String, player_1_board : Array(Array(String)), url : String)
     @id = UUID.random
     @player_1 = Player.new(player_1_name, player_1_board)
-    @player_2 = Player.no_one
+    @player_2 = Player.new
     @next_turn = @player_1
     @status = "CREATED" # TODO either an Enum or polynomic objects here instead
     @shareable_link = shorten_url("#{url}/#{id}".to_s)

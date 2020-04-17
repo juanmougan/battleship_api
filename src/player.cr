@@ -3,30 +3,22 @@ require "json"
 class Player
   property id : UUID
   property name : String
-  property board
-  property shots : Array(Array(String))
+  property board : Board
+  property shots : Board
 
   def initialize(name : String, board : Array(Array(String)))
+    puts "Creating Player with name: #{name} and board: #{board}"
     @id = UUID.random
     @name = name
-    @board = board
-    @shots = fill_shots
+    @board = Board.new(board)
+    @shots = Board.new
   end
 
-  # TODO use a loop
-  def fill_shots
-    [
-      ["SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA"],
-      ["SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA"],
-      ["SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA"],
-      ["SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA"],
-      ["SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA"],
-      ["SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA"],
-      ["SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA"],
-      ["SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA"],
-      ["SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA"],
-      ["SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA", "SEA"],
-    ]
+  def initialize
+    @id = UUID.random
+    @name = ""
+    @board = Board.new
+    @shots = Board.new
   end
 
   # A no object
