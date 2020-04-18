@@ -20,9 +20,4 @@ class Player
     @board = Board.new
     @shots = Board.new
   end
-
-  # A no object
-  def self.no_one
-    Player.new("", [] of Array(String))
-  end
 end

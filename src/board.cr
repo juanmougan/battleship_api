@@ -11,8 +11,9 @@ class Board
     @cells = from_string_cells(board)
   end
 
+  # TODO maybe use this instead: https://crystal-lang.org/api/0.23.1/JSON.html#mapping-macro
   def to_json(builder : JSON::Builder)
-    puts "please implement me"
+    @cells.each.map { |c| c.to_json(builder) }
   end
 
   def from_string_cells(board)
