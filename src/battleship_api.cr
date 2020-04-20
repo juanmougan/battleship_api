@@ -31,21 +31,19 @@ end
 class Games < CustomController
   def post(context)
     params = json(context)
-    puts "Got this JSON: #{params}"
     player_name = params["player_name"].to_s
     board = Array(Array(String)).from_json(params["board"].to_s)
     games_url = "#{base_url}/games".to_s
-    puts "Will create Game with player_name: #{player_name} board: #{board} games_url: #{games_url}"
     game = @@games.create(player_name, board, games_url)
     json(
       context,
       {
         "id":       game.id.to_s,
         "player_1": {
-          "id":   game.player_1.id.to_s,
-          "name": game.player_1.name,
-          # "board": game.player_1.board,
-          # "shots": game.player_1.shots,
+          "id":    game.player_1.id.to_s,
+          "name":  game.player_1.name,
+          "board": game.player_1.board.to_string_cells,
+          "shots": game.player_1.shots.to_string_cells,
         },
         "status":         "CREATED", # TODO: do not hardcode. Use an Enum?
         "shareable_link": game.shareable_link,

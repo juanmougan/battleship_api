@@ -1,5 +1,7 @@
 class Ship < Cell
-  @name = "SHIP"
+  def name
+    "SEA"
+  end
 
   def receive_shot
     Touched.new

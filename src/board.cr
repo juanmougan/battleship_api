@@ -2,18 +2,33 @@ class Board
   property cells : Array(Array(Cell))
 
   def initialize
-    puts "Creating Board with no params"
     @cells = fill_shots
   end
 
   def initialize(board : Array(Array(String)) | Nil)
-    puts "Creating Board with board: #{board}"
     @cells = from_string_cells(board)
   end
 
   # TODO maybe use this instead: https://crystal-lang.org/api/0.23.1/JSON.html#mapping-macro
+  # def to_json(builder : JSON::Builder)
+  #   # @cells.each.map { |c| c.to_json(builder) }
+  #   @cells.each.map { |row| row.each.map { |cell|
+  #     puts "Serializing cell: #{cell.to_json(builder)}"
+  #     cell.to_json(builder)
+  #   } }
+
+  #   # JSON.build do |json|
+  #   #   json.object do
+  #   #     json.field "cells" do
+  #   #       json.array do
+  #   #         json.text @cells.each.map { |c| c.name }
+  #   #       end
+  #   #     end
+  #   #   end
+  #   # end
+  # end
+
   def to_json(builder : JSON::Builder)
-    @cells.each.map { |c| c.to_json(builder) }
   end
 
   def from_string_cells(board)
@@ -34,6 +49,26 @@ class Board
       cells << row
     }
     cells
+  end
+
+  # TODO figure out a better solution
+  def to_string_cells
+    str_cells = [] of Array(String)
+    10.times { |i|
+      row = [] of String
+      10.times { |j|
+        # if board[i][j] == "SEA"
+        #   row << Sea.new
+        # else
+        #   if board[i][j] == "SHIP"
+        #     row << Ship.new
+        #   end
+        # end
+        row << @cells[i][j].name
+      }
+      str_cells << row
+    }
+    str_cells
   end
 
   def fill_shots

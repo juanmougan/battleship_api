@@ -1,11 +1,13 @@
 class Touched < Cell
-  @name = "TOUCHED"
+  def name
+    "SEA"
+  end
 
   def receive_shot
     Sunk.new
   end
 
-  def to_json(builder : JSON::Builder)
-    @name.to_json
-  end
+  # def to_json(builder : JSON::Builder)
+  #   @name.to_json
+  # end
 end
