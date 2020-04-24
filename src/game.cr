@@ -16,7 +16,8 @@ class Game
     @player_2 = Player.new
     @next_turn = @player_1
     @status = "CREATED" # TODO either an Enum or polynomic objects here instead
-    @shareable_link = shorten_url("#{url}/#{id}".to_s)
+    # @shareable_link = shorten_url("#{url}/#{id}".to_s)
+    @shareable_link = "#{url}/#{id}".to_s
   end
 
   def edit(player_2_name : String, player_2_board : Array(Array(String)), game_status : String)

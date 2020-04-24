@@ -4,7 +4,8 @@ require "url-shortener"
 require "./games.cr"
 
 def base_url
-  ENV["API_BASE_URL"] ||= "http://localhost:3000"
+  # ENV["API_BASE_URL"] ||= "http://localhost:3000"
+  ENV["API_BASE_URL"] ||= "http://10.0.2.2:3000"
 end
 
 def shorten_url(url)
