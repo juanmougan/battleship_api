@@ -66,14 +66,14 @@ class Games < CustomController
         "player_1": {
           "id":    game.player_1.id.to_s,
           "name":  game.player_1.name,
-          "board": game.player_1.board,
-          "shots": game.player_1.shots,
+          "board": game.player_1.board.to_string_cells,
+          "shots": game.player_1.shots.to_string_cells,
         },
         "player_2": {
           "id":    game.player_2.id.to_s,
           "name":  game.player_2.name,
-          "board": game.player_2.board,
-          "shots": game.player_2.shots,
+          "board": game.player_2.board.to_string_cells,
+          "shots": game.player_2.shots.to_string_cells,
         },
         "status":         game.status,
         "shareable_link": game.shareable_link,

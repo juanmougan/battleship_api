@@ -10,23 +10,6 @@ class Board
   end
 
   # TODO maybe use this instead: https://crystal-lang.org/api/0.23.1/JSON.html#mapping-macro
-  # def to_json(builder : JSON::Builder)
-  #   # @cells.each.map { |c| c.to_json(builder) }
-  #   @cells.each.map { |row| row.each.map { |cell|
-  #     puts "Serializing cell: #{cell.to_json(builder)}"
-  #     cell.to_json(builder)
-  #   } }
-
-  #   # JSON.build do |json|
-  #   #   json.object do
-  #   #     json.field "cells" do
-  #   #       json.array do
-  #   #         json.text @cells.each.map { |c| c.name }
-  #   #       end
-  #   #     end
-  #   #   end
-  #   # end
-  # end
 
   def to_json(builder : JSON::Builder)
   end

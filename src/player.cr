@@ -7,7 +7,6 @@ class Player
   property shots : Board
 
   def initialize(name : String, board : Array(Array(String)))
-    puts "Creating Player with name: #{name} and board: #{board}"
     @id = UUID.random
     @name = name
     @board = Board.new(board)
