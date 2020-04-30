@@ -1,9 +1,11 @@
 require "grip"
 require "uuid"
 require "url-shortener"
+require "./games.cr"
 
 def base_url
-  ENV["API_BASE_URL"] ||= "http://localhost:3000"
+  # ENV["API_BASE_URL"] ||= "http://localhost:3000"
+  ENV["API_BASE_URL"] ||= "http://10.0.2.2:3000"
 end
 
 def shorten_url(url)
@@ -12,7 +14,11 @@ def shorten_url(url)
     .shorten
 end
 
-class Index < Grip::Controller::Http
+class CustomController < Grip::Controller::Http
+  @@games = Games.new
+end
+
+class Index < CustomController
   def get(context)
     json(
       context,
@@ -23,25 +29,15 @@ class Index < Grip::Controller::Http
   end
 end
 
-class Games < Grip::Controller::Http
+class Games < CustomController
   def post(context)
     params = json(context)
-    #puts "Got this JSON: #{params}"
     player_name = params["player_name"].to_s
-    #board = params["board"].as(Array(Array(JSON::Any)))
-    #board = params["board"]
-
-    #board = Array(Array(String)).from_json(params["board"])
-    #row_str = Array(String).from_json(row.to_s)
     board = Array(Array(String)).from_json(params["board"].to_s)
-
-    #board = params["board"].as(Array(Array(String)))
-    #puts "Board class #{board.class}"
-    #puts "Board [0] class #{boardJson[0].class}"
-    shots = params["board"] # TODO empty array instead
-    game_id = UUID.random.to_s
-    url = "#{base_url}/games/#{game_id}".to_s
-    game = Game.new(player_name, board, url)
+    games_url = "#{base_url}/games".to_s
+    game = @@games.create(player_name, board, games_url)
+    puts "Created Game with ID: #{game.id}"
+    puts "Player 1 ID: #{game.player_1.id.to_s}"
     json(
       context,
       {
@@ -49,11 +45,11 @@ class Games < Grip::Controller::Http
         "player_1": {
           "id":    game.player_1.id.to_s,
           "name":  game.player_1.name,
-          "board": game.player_1.board,
-          "shots": game.player_1.shots,
+          "board": game.player_1.board.to_string_cells,
+          "shots": game.player_1.shots.to_string_cells,
         },
         "status":         "CREATED", # TODO: do not hardcode. Use an Enum?
-        "shareable_link": shorten_url("#{base_url}/games/#{game_id}"),
+        "shareable_link": game.shareable_link,
       }
     )
   end
@@ -61,26 +57,29 @@ class Games < Grip::Controller::Http
   def patch(context)
     url_params = url(context)
     body_params = json(context)
-    game_id = url_params["game_id"]
-    player_name = body_params["player_name"]
-    board = "TODO should be held in the Game object" # TODO add types here
-    player1_id = "TODO this should be held in the Game object"
-    shots = "TODO" # TODO new array
+    game_id = UUID.new(url_params["game_id"])
+    player_name = body_params["player_name"].to_s
+    board = Array(Array(String)).from_json(body_params["board"].to_s)
+    game = @@games.update(game_id, player_name, board, "READY")
+    puts "Player 2 ID: #{game.player_2.id.to_s}"
     json(
       context,
       {
-        "id":       url_params["game_id"],
+        "id":       game.id.to_s,
         "player_1": {
-          "id":    player1_id,
-          "board": "TODO board",
-          "shots": "TODO shots",
+          "id":    game.player_1.id.to_s,
+          "name":  game.player_1.name,
+          "board": game.player_1.board.to_string_cells,
+          "shots": game.player_1.shots.to_string_cells,
         },
         "player_2": {
-          "id":    UUID.random.to_s,
-          "board": "TODO board",
-          "shots": "TODO shots",
+          "id":    game.player_2.id.to_s,
+          "name":  game.player_2.name,
+          "board": game.player_2.board.to_string_cells,
+          "shots": game.player_2.shots.to_string_cells,
         },
-        "status": "CREATED", # TODO: do not hardcode. Use an Enum?
+        "status":         game.status,
+        "shareable_link": game.shareable_link,
       }
     )
   end
@@ -88,35 +87,43 @@ class Games < Grip::Controller::Http
   def put(context)
     url_params = url(context)
     body_params = json(context)
-    game_id = url_params["game_id"]
-    player_id = url_params["player_id"]
-    shots = body_params["shots"] # TODO add types here
+    game_id = UUID.new(url_params["game_id"])
+    player_id = UUID.new(url_params["player_id"])
+    game = @@games.get(game_id)
+    shots = Array(Array(String)).from_json(body_params["shots"].to_s)
+    game.shoot(player_id, shots)
     json(
       context,
       {
-        "id":             url_params["game_id"],
+        "id": game.id.to_s,
+        # TODO implement this on the Game
         "current_player": {
-          "id":    player_id,
-          "board": "TODO board",
-          "shots": shots,
+          "id":    game.current_player.id.to_s,
+          "board": game.current_player.board.to_string_cells,
+          "shots": game.current_player.shots.to_string_cells,
+        },
+        # TODO implement this on the Game
+        "next_player": {
+          "id":    game.next_player.id.to_s,
+          "board": game.next_player.board.to_string_cells,
+          "shots": game.next_player.shots.to_string_cells,
         },
         "shot_result": "MISSED", # TODO Enum?
-        "your_turn":   false,    # Of course, you just played :)
       }
     )
   end
 
   def get(context)
     url_params = url(context)
-    puts "Got this params: #{url_params}"
-    game_id = url_params["game_id"]
+    game_id = UUID.new(url_params["game_id"])
+    game = @@games.get(game_id)
     # TODO create a GameStatus and nest it inside Game
     json(
       context,
       {
-        "id":             game_id,
-        "status":         "FINISHED",       # TODO
-        "next_player_id": UUID.random.to_s, # TODO
+        "id":             game.id.to_s,
+        "status":         game.status,
+        "next_player_id": game.next_turn.id.to_s,
       }
     )
   end
