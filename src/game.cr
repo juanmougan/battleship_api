@@ -25,6 +25,37 @@ class Game
     self.status = game_status
   end
 
+  def get_player(player_id)
+    case player_id
+    when @player_1.id
+      return @player_1
+    when @player_2.id
+      return @player_2
+    else
+      raise Exception.new("Player with ID: #{player_id} not found!") # TODO throw an Error and handle it on the API, return 404 there
+    end
+  end
+
+  def shoot(player_id, shots)
+    # TODO verify game status in [READY, IN_PROGRESS]
+    player = get_player(player_id)
+    # Validation!
+    # Array(Array(String)).from_json(params["board"].to_s)
+    player.shots = Board.new(shots)
+    puts "Player shots after shot"
+    puts player.shots.to_string_cells
+  end
+
+  def current_player
+    # TODO implement
+    @player_1
+  end
+
+  def next_player
+    # TODO implement
+    @player_2
+  end
+
   def shorten_url(url)
     UrlShortener::Shortener
       .from_url(url)

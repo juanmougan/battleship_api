@@ -1,6 +1,6 @@
 class Touched < Cell
   def name
-    "SEA"
+    "TOUCHED"
   end
 
   def receive_shot

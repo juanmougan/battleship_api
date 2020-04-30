@@ -1,6 +1,6 @@
 class Ship < Cell
   def name
-    "SEA"
+    "SHIP"
   end
 
   def receive_shot

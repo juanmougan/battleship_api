@@ -1,6 +1,6 @@
 class Sunk < Cell
   def name
-    "SEA"
+    "SUNK"
   end
 
   def receive_shot
