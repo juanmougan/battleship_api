@@ -1,6 +1,6 @@
 # battleship_api
 
-TODO: Write a description here
+This is a simple API for a two player [Battleship game](<https://en.wikipedia.org/wiki/Battleship_(game)>). It is meant as an in memory game, it doesn't provide (and isn't likely to eventually provide) any persistance features.
 
 ## Installation
 
@@ -16,7 +16,7 @@ TODO: Write development instructions here
 
 ## Contributing
 
-1. Fork it (<https://github.com/your-github-user/battleship_api/fork>)
+1. Fork it (<https://github.com/juanmougan/battleship_api/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
@@ -24,4 +24,4 @@ TODO: Write development instructions here
 
 ## Contributors
 
-- [Juan Manuel Mougan](https://github.com/your-github-user) - creator and maintainer
+- [Juan Manuel Mougan](https://github.com/juanmougan) - creator and maintainer
