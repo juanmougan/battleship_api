@@ -29,7 +29,7 @@ class Index < CustomController
   end
 end
 
-class Games < CustomController
+class GameApi < CustomController
   def post(context)
     params = json(context)
     player_name = params["player_name"].to_s
@@ -132,11 +132,11 @@ end
 class Application < Grip::Application
   def initialize
     get "/", Index
-    post "/games", Games
-    patch "/games/:game_id", Games
-    put "/games/:game_id/players/:player_id", Games
+    post "/games", GameApi
+    patch "/games/:game_id", GameApi
+    put "/games/:game_id/players/:player_id", GameApi
     # TODO decide if I need "/games/:id" instead
-    get "/games/:game_id/status", Games
+    get "/games/:game_id/status", GameApi
   end
 end
 

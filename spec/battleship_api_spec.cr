@@ -1,6 +1,7 @@
 require "./spec_helper"
+require "../src/battleship_api.cr"
 
-describe BattleshipApi do
+describe Application do
   # TODO: Write tests
 
   it "works" do
