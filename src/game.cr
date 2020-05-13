@@ -7,7 +7,8 @@ class Game
   property id : UUID
   property player_1 : Player
   property player_2 : Player
-  property next_turn : Player
+  property previous_player : Player
+  property next_player : Player
   property status : String # TODO refactor to a type
   property shareable_link : String
 
@@ -15,7 +16,8 @@ class Game
     @id = UUID.random
     @player_1 = Player.new(player_1_name, player_1_board)
     @player_2 = Player.new
-    @next_turn = @player_1
+    @next_player = @player_1
+    @previous_player = Player.new
     @status = "CREATED" # TODO either an Enum or polynomic objects here instead
     # @shareable_link = shorten_url("#{url}/#{id}".to_s)
     @shareable_link = "#{url}/#{id}".to_s
@@ -37,17 +39,31 @@ class Game
     end
   end
 
-  def shoot(player_id, shots)
-    # TODO verify game status in [READY, IN_PROGRESS]
-    player = get_player(player_id)
-    # Validation!
-    # Array(Array(String)).from_json(params["board"].to_s)
-    player.shots = Board.new(shots)
-    puts "Player shots after shot"
-    puts player.shots.to_string_cells
+  def other_player(player_id)
+    case player_id
+    when @player_1.id
+      return @player_2
+    when @player_2.id
+      return @player_1
+    else
+      raise Exception.new("Player with ID: #{player_id} not found!")
+    end
   end
 
-  def current_player
+  def shoot(player_id, shots)
+    # TODO verify game status in [READY, IN_PROGRESS]
+    # TODO validate it's player_id's turn (== next_player)
+    player = get_player(player_id)
+    # TODO Maybe the Board can hold the last shot result
+    player.shots = GameEngine.move(player.shots, Board.new(shots))
+    puts "Player shots after shot"
+    puts player.shots.to_string_cells
+    @previous_player = player
+    @next_player = other_player(player_id)
+    # TODO need to store shot's result somewhere
+  end
+
+  def previous_player
     # TODO implement
     @player_1
   end

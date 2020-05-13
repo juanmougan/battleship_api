@@ -97,10 +97,10 @@ class GameApi < CustomController
       {
         "id": game.id.to_s,
         # TODO implement this on the Game
-        "current_player": {
-          "id":    game.current_player.id.to_s,
-          "board": game.current_player.board.to_string_cells,
-          "shots": game.current_player.shots.to_string_cells,
+        "previous_player": {
+          "id":    game.previous_player.id.to_s,
+          "board": game.previous_player.board.to_string_cells,
+          "shots": game.previous_player.shots.to_string_cells,
         },
         # TODO implement this on the Game
         "next_player": {
@@ -123,7 +123,7 @@ class GameApi < CustomController
       {
         "id":             game.id.to_s,
         "status":         game.status,
-        "next_player_id": game.next_turn.id.to_s,
+        "next_player_id": game.next_player.id.to_s,
       }
     )
   end

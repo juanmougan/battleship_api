@@ -1,3 +1,5 @@
+require "./invalid_move_exception.cr"
+
 module GameEngine
   def self.valid_move?(before : Board, after : Board)
     differences = 0
@@ -7,5 +9,12 @@ module GameEngine
       }
     }
     differences == 1
+  end
+
+  def self.move(before : Board, after : Board)
+    if !self.valid_move?(before, after)
+      raise InvalidMoveException.new("Invalid move!")
+    end
+    return after
   end
 end
