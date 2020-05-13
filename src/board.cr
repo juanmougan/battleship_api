@@ -1,3 +1,7 @@
+require "./cell.cr"
+require "./sea.cr"
+require "./ship.cr"
+
 class Board
   property cells : Array(Array(Cell))
 

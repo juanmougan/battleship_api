@@ -6,7 +6,7 @@ shards:
 
   grip:
     github: grip-framework/grip
-    version: 0.28.2
+    version: 0.28.4
 
   jwt:
     github: crystal-community/jwt

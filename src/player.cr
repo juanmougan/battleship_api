@@ -1,4 +1,5 @@
 require "json"
+require "./board.cr"
 
 class Player
   property id : UUID

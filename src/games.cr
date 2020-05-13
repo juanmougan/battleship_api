@@ -1,5 +1,6 @@
 require "uuid"
 require "./game.cr"
+require "./board.cr"
 
 # TODO add better docs
 # This acts as a pseudo on memory repository

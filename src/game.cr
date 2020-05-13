@@ -1,4 +1,5 @@
 require "uuid"
+require "./player.cr"
 
 class Game
   BOARD_SIZE = 10
